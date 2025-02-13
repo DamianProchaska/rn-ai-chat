@@ -1,12 +1,9 @@
-import { Tabs } from 'expo-router';
-import React from 'react';
-import { Platform } from 'react-native';
-
-import { HapticTab } from '@/components/HapticTab';
-import { IconSymbol } from '@/components/ui/IconSymbol';
-import TabBarBackground from '@/components/ui/TabBarBackground';
-import { Colors } from '@/constants/Colors';
-import { useColorScheme } from '@/hooks/useColorScheme';
+import React from "react";
+import { Tabs } from "expo-router";
+import { Ionicons } from "@expo/vector-icons";
+import { StyleSheet } from "react-native";
+import { Colors } from "../../constants/Colors";
+import { useColorScheme } from "../../hooks/useColorScheme";
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
@@ -14,32 +11,52 @@ export default function TabLayout() {
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
-        headerShown: false,
-        tabBarButton: HapticTab,
-        tabBarBackground: TabBarBackground,
-        tabBarStyle: Platform.select({
-          ios: {
-            // Use a transparent background on iOS to show the blur effect
-            position: 'absolute',
-          },
-          default: {},
-        }),
-      }}>
+        headerShown: true,
+        tabBarActiveTintColor: Colors[colorScheme].tint,
+        tabBarInactiveTintColor: Colors[colorScheme].tabIconDefault,
+        tabBarStyle: [
+          styles.tabBar,
+          { backgroundColor: Colors[colorScheme].background },
+        ],
+        headerStyle: {
+          backgroundColor: Colors[colorScheme].background,
+        },
+        headerTintColor: Colors[colorScheme].text,
+        headerTitleStyle: {
+          fontWeight: "600",
+          fontSize: 18,
+        },
+      }}
+    >
       <Tabs.Screen
-        name="index"
+        name="chat"
         options={{
-          title: 'Home',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="house.fill" color={color} />,
+          title: "Chat",
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="chatbubble-ellipses" color={color} size={size} />
+          ),
         }}
       />
       <Tabs.Screen
-        name="explore"
+        name="profile"
         options={{
-          title: 'Explore',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="paperplane.fill" color={color} />,
+          title: "Profile",
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="person" color={color} size={size} />
+          ),
         }}
       />
     </Tabs>
   );
 }
+
+const styles = StyleSheet.create({
+  tabBar: {
+    borderTopWidth: 0,
+    shadowColor: "#000",
+    shadowOpacity: 0.1,
+    shadowOffset: { width: 0, height: -2 },
+    shadowRadius: 4,
+    elevation: 8,
+  },
+});
